@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:synkrama_demo/core/routing/routes.dart';
 
 import '../../ui/authentication/signin/signIn.dart';
+import '../../ui/authentication/signup/signup.dart';
+import '../../ui/pages/bottomNavigation.dart';
 
 class PageRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case Routes.SignUpRoute:
-      //   return _getLeftPageRoute(const Signup(), settings);
+      case Routes.SignUpRoute:
+        return _getLeftPageRoute(const SignUp(), settings);
       case Routes.SignInRoute:
-        return _getLeftPageRoute(const SignIn(), settings);
+        return _getRightPageRoute(const SignIn(), settings);
+      case Routes.BottomBarRoute:
+        return _getRightPageRoute(const BottomNavigationTabs(), settings);
       default:
         return MaterialPageRoute(
           builder: (BuildContext context) => Scaffold(

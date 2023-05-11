@@ -120,3 +120,21 @@
 //     await Share.share(link);
 //   }
 // }
+class Utils {
+  static String validateEmail(String value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern);
+    return (!regex.hasMatch(value)) ? "Please Enter Valid Email" : "";
+  }
+
+  static String validatePassword(String value) {
+    return value.length < 6 ? "Password length must be more than 6" : "";
+  }
+
+  static String validateConfirmPass(String password, String cPass) {
+    return password != cPass
+        ? "Password and Confirm Password must be same"
+        : "";
+  }
+}

@@ -34,9 +34,9 @@ class Preferences {
     prefs.setBool(key, value);
   }
 
-  static Future<bool> getBool(String key, bool value) async {
+  static Future<bool> getBool(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(key) ?? value;
+    return prefs.getBool(key) ?? false;
   }
 
   static setDouble(String key, double value) async {

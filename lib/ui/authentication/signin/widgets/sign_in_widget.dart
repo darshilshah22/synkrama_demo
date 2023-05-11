@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/constants/color_constants.dart';
+import '../../../../core/constants/font_family_constants.dart';
+
 AppBar buildAppBar() {
   return AppBar(
     centerTitle: true,
@@ -15,20 +18,6 @@ AppBar buildAppBar() {
   );
 }
 
-Widget buildThirdPartyLogin(BuildContext context) {
-  return Container(
-    margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h, bottom: 16.h),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        buildIconButton("assets/icons/google.png", 40),
-        buildIconButton("assets/icons/apple.png", 40),
-        buildIconButton("assets/icons/facebook.png", 40),
-      ],
-    ),
-  );
-}
-
 Widget buildIconButton(String iconName, double height) {
   return GestureDetector(
     onTap: () {},
@@ -38,19 +27,15 @@ Widget buildIconButton(String iconName, double height) {
 }
 
 Widget buildLightText(String text) {
-  return Container(
-    margin: EdgeInsets.only(top: 10.h),
-    child: Text(
-      text,
-      style: TextStyle(
-          color: Colors.grey.withOpacity(0.5),
-          fontSize: 14.sp,
-          fontWeight: FontWeight.normal),
-    ),
+  return Text(
+    text,
+    style: TextStyle(
+        color: Colors.grey, fontSize: 14.sp, fontWeight: FontWeight.normal),
   );
 }
 
-Widget buildTextField(String icon, String hint) {
+Widget buildTextField(String icon, String hint,
+    TextEditingController controller, Function(String) onChanged) {
   return Container(
     margin: EdgeInsets.only(top: 8.h),
     padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 8.w),
@@ -66,9 +51,32 @@ Widget buildTextField(String icon, String hint) {
         ),
         Flexible(
             child: TextFormField(
+              controller: controller,
+          onChanged: onChanged,
           decoration: InputDecoration(border: InputBorder.none, hintText: hint),
         )),
       ],
     ),
+  );
+}
+
+Widget buildRichText(String text, String subText) {
+  return RichText(
+    text: TextSpan(
+        text: text,
+        style: TextStyle(
+            color: Colors.grey.withOpacity(0.8),
+            fontSize: 12.sp,
+            fontFamily: FontFamilyConstants.monteserratRegular,
+            fontWeight: FontWeight.normal),
+        children: [
+          TextSpan(
+              text: subText,
+              style: TextStyle(
+                  color: ColorConstants.buttonColor,
+                  fontSize: 12.sp,
+                  fontFamily: FontFamilyConstants.monteserratBold,
+                  fontWeight: FontWeight.bold))
+        ]),
   );
 }

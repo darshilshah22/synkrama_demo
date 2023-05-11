@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:synkrama_demo/core/constants/color_constants.dart';
+
+import '../constants/font_family_constants.dart';
 
 Widget buildButton(String text, VoidCallback func) {
   return GestureDetector(
     onTap: func,
     child: Container(
-      margin: EdgeInsets.only(top: 100.h, left: 30.w, right: 30.w),
       width: 325.w,
       height: 50.h,
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.w),
-          color: const Color(0xFF17203A),
+          color: ColorConstants.buttonColor,
           boxShadow: [
             BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -22,7 +24,10 @@ Widget buildButton(String text, VoidCallback func) {
       child: Text(
         text,
         style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.sp),
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: FontFamilyConstants.monteserratBold,
+            fontSize: 20.sp),
       ),
     ),
   );
