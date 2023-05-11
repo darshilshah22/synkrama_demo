@@ -42,5 +42,6 @@ class PreferenceHelper {
 
   static Future<void> clearPreference() async {
     await Preferences.remove(userDetails);
+    await Preferences.remove("login");
   }
 }

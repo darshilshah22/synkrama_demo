@@ -6,7 +6,10 @@ import 'package:synkrama_demo/core/providers/signInProvider.dart';
 import 'package:synkrama_demo/core/utils/utils.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/constants.dart';
 import '../../../core/constants/font_family_constants.dart';
+import '../../../core/model/userModel.dart';
+import '../../../core/prefs/preference_helper.dart';
 import '../../../core/routing/routes.dart';
 import '../../../core/widgets/button.dart';
 import 'widgets/sign_in_widget.dart';
@@ -25,6 +28,25 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   String emailError = "";
   String passwordError = "";
+  bool isEmail = false;
+
+  getUsers() async {
+    usersList = await PreferenceHelper.getUsers() ?? [];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getUsers();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +166,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  validation() {
-    print(emailController.text);
+  validation() async {
     if (emailController.text.isEmpty) {
       Provider.of<AuthProvider>(context, listen: false)
           .setEmailError("Please enter email");
@@ -153,8 +174,30 @@ class _SignInState extends State<SignIn> {
       Provider.of<AuthProvider>(context, listen: false)
           .setPasswordError("Please enter password");
     } else {
-      print("Success");
-      Preferences.setBool('login', true);
+      User? user;
+      for (var e in usersList) {
+        if (e.email == emailController.text) {
+          setState(() {
+            isEmail = true;
+            user = e;
+          });
+        }
+        break;
+      }
+      if (isEmail && user != null) {
+        if (passwordController.text == user!.password) {
+          Preferences.setBool('login', true);
+          await PreferenceHelper.setUser(user!);
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.BottomBarRoute, (route) => false);
+        } else {
+          Provider.of<AuthProvider>(context, listen: false)
+              .setPasswordError("Please enter valid password");
+        }
+      } else {
+        Provider.of<AuthProvider>(context, listen: false)
+            .setEmailError("Email is not registered. Register email.");
+      }
     }
   }
 }

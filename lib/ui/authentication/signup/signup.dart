@@ -27,12 +27,15 @@ class _SignUpState extends State<SignUp> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final nameController = TextEditingController();
+  bool isEmail = false;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     getUsers();
+    Provider.of<AuthProvider>(context, listen: false).setEmailError("");
+    Provider.of<AuthProvider>(context, listen: false).setPasswordError("");
     super.initState();
   }
 
@@ -221,17 +224,30 @@ class _SignUpState extends State<SignUp> {
         isCheck = false;
       });
     } else {
-      User user = User(
-          name: nameController.text,
-          email: emailController.text,
-          password: passwordController.text);
-      usersList.add(user);
-      Preferences.setBool('login', true);
-      await PreferenceHelper.setUser(user);
-      await PreferenceHelper.setUsers(usersList);
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(
-          context, Routes.BottomBarRoute, (route) => false);
+      for (var e in usersList) {
+        if (e.email == emailController.text) {
+          setState(() {
+            isEmail = true;
+          });
+        }
+        break;
+      }
+      if (!isEmail) {
+        User user = User(
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text);
+        usersList.add(user);
+        Preferences.setBool('login', true);
+        await PreferenceHelper.setUser(user);
+        await PreferenceHelper.setUsers(usersList);
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.BottomBarRoute, (route) => false);
+      } else {
+        Provider.of<AuthProvider>(context, listen: false)
+            .setEmailError("Email already exist");
+      }
     }
   }
 }
